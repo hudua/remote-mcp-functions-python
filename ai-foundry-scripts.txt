@@ -12,7 +12,7 @@ data = {
   	"tools": [
           {
               "type": "mcp",
-              "server_label": "sobeysmcp",
+              "server_label": "",
               "server_url": "https://func-api-.azurewebsites.net/runtime/webhooks/mcp/sse?code=",
           }
       ],
