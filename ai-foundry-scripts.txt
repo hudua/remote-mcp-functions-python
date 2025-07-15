@@ -1,0 +1,55 @@
+az login --tenant
+az account get-access-token --resource "https://ai.azure.com"
+
+import requests
+
+url = "https://.services.ai.azure.com/api/projects/firstProject/assistants?api-version=2025-05-15-preview"
+agent_token = ""
+
+headers = {"Authorization": "Bearer " + agent_token, "Content-Type": "application/json"}
+data = {
+	  "instructions": "You are a customer support chatbot. Use the tools provided and your knowledge base to best respond to customer queries.",
+  	"tools": [
+          {
+              "type": "mcp",
+              "server_label": "sobeysmcp",
+              "server_url": "https://func-api-.azurewebsites.net/runtime/webhooks/mcp/sse?code=",
+          }
+      ],
+  "name": "my-assistant-mcp-function",
+  "model": "gpt-4o",
+}
+import json
+requests.post(url = url, headers = headers,data = json.dumps(data)).text
+
+
+url_thread = "https://.services.ai.azure.com/api/projects/firstProject/threads?api-version=2025-05-15-preview"
+
+requests.post(url = url_thread, headers = headers).text
+
+
+url_question = "https://.services.ai.azure.com/api/projects/firstProject/threads/thread_/messages?api-version=2025-05-15-preview"
+question = {
+"role":"user",
+"content":"perform hello world action"
+}
+
+requests.post(url = url_question, headers = headers, data =json.dumps(question)).text
+
+
+url_run = "https://.services.ai.azure.com/api/projects/firstProject/threads/thread_/runs?api-version=2025-05-15-preview"
+
+run_data = {
+"assistant_id": "asst_hkx8IAXSERxhXGs3jN8LZIrg",
+"tool_resources": {"mcp":[{"server_label":"","require_approval":"never"}]}
+}
+
+requests.post(url = url_run, headers = headers, data =json.dumps(run_data)).text
+
+url_run_status = "https://.services.ai.azure.com/api/projects/firstProject/threads/thread_/runs/run_?api-version=2025-05-15-preview"
+
+requests.get(url = url_run_status, headers = headers).text
+
+
+
+
